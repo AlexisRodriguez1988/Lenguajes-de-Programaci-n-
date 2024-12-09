@@ -1,0 +1,72 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Función para obtener la primera vocal interna de un apellido
+char obtenerVocalInterna(const string& apellido) {
+    for (size_t i = 1; i < apellido.length(); ++i) {
+        if (apellido[i] == 'A' || apellido[i] == 'E' || apellido[i] == 'I' || apellido[i] == 'O' || apellido[i] == 'U') {
+            return apellido[i];
+        }
+    }
+    return 'X';  // Si no encuentra vocal, se retorna 'X'
+}
+
+int main() {
+    string apellidoPaterno, apellidoMaterno, primerNombre;
+    int dia, mes, año;
+
+    // Solicitar datos
+    cout << "Ingresa el apellido paterno: ";
+    getline(cin, apellidoPaterno);
+    cout << "Ingresa el apellido materno: ";
+    getline(cin, apellidoMaterno);
+    cout << "Ingresa el primer nombre: ";
+    getline(cin, primerNombre);
+    cout << "Ingresa el dia de nacimiento (dd): ";
+    cin >> dia;
+    cout << "Ingresa el mes de nacimiento (mm): ";
+    cin >> mes;
+    cout << "Ingresa el año de nacimiento (aaaa): ";
+    cin >> año;
+
+    // Generar RFC
+    string rfc = "";
+
+    // Primeros dos caracteres: primera letra del apellido paterno + primera vocal interna del apellido paterno
+    rfc += toupper(apellidoPaterno[0]);
+    rfc += toupper(obtenerVocalInterna(apellidoPaterno));
+
+    // Tercer carácter: inicial del apellido materno o 'X' si no existe
+    if (apellidoMaterno.empty()) {
+        rfc += 'X';
+    } else {
+        rfc += toupper(apellidoMaterno[0]);
+    }
+
+    // Cuarto carácter: inicial del primer nombre
+    rfc += toupper(primerNombre[0]);
+    
+
+    // Quinto y sexto carácter: últimos dos dígitos del año de nacimiento
+    rfc += to_string(año).substr(2, 2);
+
+    // Séptimo y octavo carácter: mes de nacimiento
+    if (mes < 10) {
+        rfc += "0" + to_string(mes);  // Asegura que el mes tenga dos dígitos
+    } else {
+        rfc += to_string(mes);
+    }
+
+    // Noveno y décimo carácter: día de nacimiento
+    if (dia < 10) {
+        rfc += "0" + to_string(dia);  // Asegura que el día tenga dos dígitos
+    } else {
+        rfc += to_string(dia);
+    }
+
+    // Mostrar el RFC generado
+    cout << "El RFC generado es: " << rfc << endl;
+
+    return 0;
+}
